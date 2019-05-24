@@ -1,0 +1,12 @@
+apply plugin: PrivateModulePlugin
+
+dependencies {
+    compile project(":eventuate-messaging-rabbitmq-producer")
+    compile project(":eventuate-messaging-rabbitmq-consumer")
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    compile "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
+}
+
+test {
+    forkEvery 1
+}
