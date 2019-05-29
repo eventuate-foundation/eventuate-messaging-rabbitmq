@@ -1,13 +1,12 @@
 package io.eventuate.messaging.rabbitmq.integrationtests;
 
 import com.google.common.collect.ImmutableSet;
-import io.eventuate.common.messaging.AbstractMessagingTest;
-import io.eventuate.common.messaging.CoordinatorFactory;
-import io.eventuate.common.messaging.CoordinatorFactoryImpl;
 import io.eventuate.coordination.leadership.zookeeper.ZkLeaderSelector;
+import io.eventuate.messaging.partition.management.CoordinatorFactory;
+import io.eventuate.messaging.partition.management.CoordinatorFactoryImpl;
+import io.eventuate.messaging.partition.management.tests.AbstractMessagingTest;
 import io.eventuate.messaging.rabbitmq.consumer.*;
 import io.eventuate.messaging.rabbitmq.producer.EventuateRabbitMQProducer;
-import io.eventuate.messaging.rabbitmq.consumer.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;

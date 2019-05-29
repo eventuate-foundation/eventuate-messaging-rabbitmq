@@ -1,7 +1,7 @@
 package io.eventuate.messaging.rabbitmq.consumer;
 
 import com.rabbitmq.client.*;
-import io.eventuate.common.messaging.*;
+import io.eventuate.messaging.partition.management.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

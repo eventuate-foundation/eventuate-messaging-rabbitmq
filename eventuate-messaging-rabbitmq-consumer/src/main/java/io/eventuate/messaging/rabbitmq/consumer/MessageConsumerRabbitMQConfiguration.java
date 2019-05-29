@@ -2,7 +2,7 @@ package io.eventuate.messaging.rabbitmq.consumer;
 
 import io.eventuate.coordination.leadership.LeaderSelectorFactory;
 import io.eventuate.coordination.leadership.zookeeper.ZkLeaderSelector;
-import io.eventuate.common.messaging.*;
+import io.eventuate.messaging.partition.management.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@Import(TramConsumerCommonConfiguration.class)
-public class TramConsumerRabbitMQConfiguration {
+public class MessageConsumerRabbitMQConfiguration {
 
   @Value("${eventuatelocal.zookeeper.connection.string}")
   private String zkUrl;
