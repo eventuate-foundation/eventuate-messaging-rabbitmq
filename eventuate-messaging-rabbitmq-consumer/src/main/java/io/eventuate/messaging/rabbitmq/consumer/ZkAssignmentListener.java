@@ -1,6 +1,6 @@
 package io.eventuate.messaging.rabbitmq.consumer;
 
-import io.eventuate.javaclient.commonimpl.JSonMapper;
+import io.eventuate.common.json.mapper.JSonMapper;
 import io.eventuate.messaging.partition.management.Assignment;
 import io.eventuate.messaging.partition.management.AssignmentListener;
 import org.apache.curator.framework.CuratorFramework;
