@@ -3,7 +3,7 @@ apply plugin: PublicModulePlugin
 dependencies {
     compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
     compile "io.eventuate.common:eventuate-common-coordination-leadership:$eventuateCommonVersion"
-    compile "io.eventuate.messaging.partition.management:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
+    compile "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
     compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.2.0'
 
     compile('org.apache.curator:curator-framework:2.11.0')
