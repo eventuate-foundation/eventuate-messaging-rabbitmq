@@ -1,0 +1,11 @@
+zookeeper:
+  image: test-eventuate-zookeeper
+  ports:
+    - 2181:2181
+    - 2888:2888
+    - 3888:3888
+
+rabbitmq:
+  image: test-eventuate-rabbitmq
+  ports:
+    - 5672:5672
