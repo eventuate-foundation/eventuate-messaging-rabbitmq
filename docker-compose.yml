@@ -6,6 +6,6 @@ zookeeper:
     - 3888:3888
 
 rabbitmq:
-  image: test-eventuate-rabbitmq
+  build: ./rabbitmq
   ports:
     - 5672:5672
