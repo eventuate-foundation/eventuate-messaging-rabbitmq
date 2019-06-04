@@ -1,6 +1,6 @@
 package io.eventuate.messaging.rabbitmq.consumer;
 
-import io.eventuate.messaging.partition.management.GroupMember;
+import io.eventuate.messaging.partitionmanagement.GroupMember;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;

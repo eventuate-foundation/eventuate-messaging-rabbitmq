@@ -1,8 +1,8 @@
 package io.eventuate.messaging.rabbitmq.consumer;
 
 import io.eventuate.common.json.mapper.JSonMapper;
-import io.eventuate.messaging.partition.management.Assignment;
-import io.eventuate.messaging.partition.management.AssignmentListener;
+import io.eventuate.messaging.partitionmanagement.Assignment;
+import io.eventuate.messaging.partitionmanagement.AssignmentListener;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.slf4j.Logger;

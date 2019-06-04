@@ -2,9 +2,9 @@ package io.eventuate.messaging.rabbitmq.integrationtests;
 
 import com.google.common.collect.ImmutableSet;
 import io.eventuate.coordination.leadership.zookeeper.ZkLeaderSelector;
-import io.eventuate.messaging.partition.management.CoordinatorFactory;
-import io.eventuate.messaging.partition.management.CoordinatorFactoryImpl;
-import io.eventuate.messaging.partition.management.tests.AbstractMessagingTest;
+import io.eventuate.messaging.partitionmanagement.CoordinatorFactory;
+import io.eventuate.messaging.partitionmanagement.CoordinatorFactoryImpl;
+import io.eventuate.messaging.partitionmanagement.tests.AbstractMessagingTest;
 import io.eventuate.messaging.rabbitmq.consumer.*;
 import io.eventuate.messaging.rabbitmq.producer.EventuateRabbitMQProducer;
 import org.apache.curator.framework.CuratorFramework;
@@ -79,7 +79,6 @@ public class MessagingTest extends AbstractMessagingTest {
             rabbitMQURL,
             partitionCount);
 
-    applicationContext.getAutowireCapableBeanFactory().autowireBean(messageConsumerRabbitMQ);
     return messageConsumerRabbitMQ;
   }
 

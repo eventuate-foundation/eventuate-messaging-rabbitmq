@@ -2,10 +2,11 @@ package io.eventuate.messaging.rabbitmq.consumer;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import io.eventuate.messaging.partition.management.CommonMessageConsumer;
-import io.eventuate.messaging.partition.management.CoordinatorFactory;
-import io.eventuate.messaging.partition.management.SubscriptionLeaderHook;
-import io.eventuate.messaging.partition.management.SubscriptionLifecycleHook;
+import io.eventuate.messaging.partitionmanagement.CommonMessageConsumer;
+import io.eventuate.messaging.partitionmanagement.CommonMessageConsumer;
+import io.eventuate.messaging.partitionmanagement.CoordinatorFactory;
+import io.eventuate.messaging.partitionmanagement.SubscriptionLeaderHook;
+import io.eventuate.messaging.partitionmanagement.SubscriptionLifecycleHook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
