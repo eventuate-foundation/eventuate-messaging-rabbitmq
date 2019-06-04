@@ -2,7 +2,7 @@ package io.eventuate.messaging.rabbitmq.consumer;
 
 import io.eventuate.coordination.leadership.LeaderSelectorFactory;
 import io.eventuate.coordination.leadership.zookeeper.ZkLeaderSelector;
-import io.eventuate.messaging.partition.management.*;
+import io.eventuate.messaging.partitionmanagement.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
