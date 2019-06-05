@@ -23,7 +23,7 @@ public class MessageConsumerRabbitMQConfiguration {
   private String rabbitMQUrl;
 
   @Bean
-  public MessageConsumerRabbitMQImpl messageConsumer(CoordinatorFactory coordinatorFactory) {
+  public MessageConsumerRabbitMQImpl messageConsumerRabbitMQ(CoordinatorFactory coordinatorFactory) {
     return new MessageConsumerRabbitMQImpl(coordinatorFactory, rabbitMQUrl, partitionCount);
   }
 
