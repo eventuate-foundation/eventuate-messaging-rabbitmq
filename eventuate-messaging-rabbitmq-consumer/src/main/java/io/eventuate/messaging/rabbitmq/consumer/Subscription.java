@@ -98,7 +98,11 @@ public class Subscription {
   }
 
 
-  public void close() {
+  public synchronized void close() {
+    if (!consumerChannel.isOpen()) {
+      return;
+    }
+
     logger.info("Closing subscription. {}", identificationInformation());
 
     coordinator.close();
@@ -243,7 +247,14 @@ public class Subscription {
                                  AMQP.BasicProperties properties,
                                  byte[] body) throws IOException {
         RabbitMQMessage message = new RabbitMQMessage(new String(body, "UTF-8"));
-        handleMessageCallback.accept(message, () -> acknowledge(envelope, consumerChannel));
+
+        try {
+          if (consumerChannel.isOpen()) {
+            handleMessageCallback.accept(message, () -> acknowledge(envelope, consumerChannel));
+          }
+        } catch (Exception e) {
+          close();
+        }
       }
     };
   }
