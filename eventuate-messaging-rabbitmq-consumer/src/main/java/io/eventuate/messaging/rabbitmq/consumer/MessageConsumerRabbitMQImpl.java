@@ -103,9 +103,10 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     } catch (Throwable t) {
       logger.info("consumer {} with subscriberId {} got exception when tried to handle message {}", id, subscriberId, message);
       logger.info("Got exception ", t);
-    } finally {
-      acknowledgeCallback.run();
+      throw new RuntimeException(t);
     }
+
+    acknowledgeCallback.run();
   }
 
   @Override
