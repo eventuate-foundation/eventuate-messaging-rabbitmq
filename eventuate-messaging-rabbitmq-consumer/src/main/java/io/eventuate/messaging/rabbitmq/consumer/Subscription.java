@@ -1,6 +1,8 @@
 package io.eventuate.messaging.rabbitmq.consumer;
 
 import com.rabbitmq.client.*;
+import io.eventuate.coordination.leadership.LeaderSelectedCallback;
+import io.eventuate.coordination.leadership.LeadershipController;
 import io.eventuate.messaging.partitionmanagement.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +86,7 @@ public class Subscription {
   protected Coordinator createCoordinator(String groupMemberId,
                                           String subscriberId,
                                           Set<String> channels,
-                                          Runnable leaderSelectedCallback,
+                                          LeaderSelectedCallback leaderSelectedCallback,
                                           Runnable leaderRemovedCallback,
                                           java.util.function.Consumer<Assignment> assignmentUpdatedCallback) {
 
@@ -126,7 +128,7 @@ public class Subscription {
     }
   }
 
-  private void leaderSelected() {
+  private void leaderSelected(LeadershipController leadershipController) {
     leaderHook.ifPresent(hook -> hook.leaderUpdated(true, subscriptionId));
     logger.info("Subscription selected as leader. {}", identificationInformation());
 
