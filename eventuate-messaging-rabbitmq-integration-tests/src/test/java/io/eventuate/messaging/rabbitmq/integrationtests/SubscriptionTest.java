@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import io.eventuate.coordination.leadership.LeaderSelectedCallback;
 import io.eventuate.messaging.partitionmanagement.Assignment;
 import io.eventuate.messaging.partitionmanagement.Coordinator;
 import io.eventuate.messaging.rabbitmq.consumer.Subscription;
@@ -61,7 +62,7 @@ public class SubscriptionTest {
 
     //created subscribtion selected as leader, assigned all partition to it self
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue);
-    coordinationCallbacks.getLeaderSelectedCallback().run();
+    coordinationCallbacks.getLeaderSelectedCallback().run(null);
     coordinationCallbacks.getAssignmentUpdatedCallback().accept(new Assignment(ImmutableSet.of(destination), ImmutableMap.of(destination, ImmutableSet.of(0, 1))));
 
     for (int i = 0; i < messages; i++) {
@@ -80,7 +81,7 @@ public class SubscriptionTest {
 
     //new leader which assigns partitions to itself
     coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue);
-    coordinationCallbacks.getLeaderSelectedCallback().run();
+    coordinationCallbacks.getLeaderSelectedCallback().run(null);
     coordinationCallbacks.getAssignmentUpdatedCallback().accept(new Assignment(ImmutableSet.of(destination), ImmutableMap.of(destination, ImmutableSet.of(0, 1))));
 
     for (int i = 0; i < messages; i++) {
@@ -110,7 +111,7 @@ public class SubscriptionTest {
 
 
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue1);
-    coordinationCallbacks.getLeaderSelectedCallback().run();
+    coordinationCallbacks.getLeaderSelectedCallback().run(null);
     coordinationCallbacks.getAssignmentUpdatedCallback().accept(new Assignment(ImmutableSet.of(destination), ImmutableMap.of(destination, ImmutableSet.of(0))));
 
     ConcurrentLinkedQueue<Integer> concurrentLinkedQueue2 = new ConcurrentLinkedQueue<>();
@@ -143,7 +144,7 @@ public class SubscriptionTest {
       protected Coordinator createCoordinator(String groupMemberId,
                                               String subscriberId,
                                               Set<String> channels,
-                                              Runnable leaderSelectedCallback,
+                                              LeaderSelectedCallback leaderSelectedCallback,
                                               Runnable leaderRemovedCallback,
                                               Consumer<Assignment> assignmentUpdatedCallback) {
 
@@ -159,24 +160,24 @@ public class SubscriptionTest {
   }
 
   private static class CoordinationCallbacks {
-    private Runnable leaderSelectedCallback;
+    private LeaderSelectedCallback leaderSelectedCallback;
     private Consumer<Assignment> assignmentUpdatedCallback;
     private Runnable leaderRemovedCallback;
 
     public CoordinationCallbacks() {
     }
 
-    public CoordinationCallbacks(Runnable leaderSelectedCallback, Consumer<Assignment> assignmentUpdatedCallback, Runnable leaderRemovedCallback) {
+    public CoordinationCallbacks(LeaderSelectedCallback leaderSelectedCallback, Consumer<Assignment> assignmentUpdatedCallback, Runnable leaderRemovedCallback) {
       this.leaderSelectedCallback = leaderSelectedCallback;
       this.assignmentUpdatedCallback = assignmentUpdatedCallback;
       this.leaderRemovedCallback = leaderRemovedCallback;
     }
 
-    public Runnable getLeaderSelectedCallback() {
+    public LeaderSelectedCallback getLeaderSelectedCallback() {
       return leaderSelectedCallback;
     }
 
-    public void setLeaderSelectedCallback(Runnable leaderSelectedCallback) {
+    public void setLeaderSelectedCallback(LeaderSelectedCallback leaderSelectedCallback) {
       this.leaderSelectedCallback = leaderSelectedCallback;
     }
 
