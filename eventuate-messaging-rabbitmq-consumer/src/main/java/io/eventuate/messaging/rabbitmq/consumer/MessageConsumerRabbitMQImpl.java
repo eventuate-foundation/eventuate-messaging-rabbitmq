@@ -68,9 +68,11 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setHost(rabbitMQUrl);
     try {
+      logger.info("Creating connection");
       connection = factory.newConnection();
+      logger.info("Created connection");
     } catch (IOException | TimeoutException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Creating connection failed", e);
       throw new RuntimeException(e);
     }
   }
@@ -116,9 +118,11 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     subscriptions.forEach(Subscription::close);
 
     try {
+      logger.info("Closing connection");
       connection.close();
+      logger.info("Closed connection");
     } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Closing connection failed", e);
     }
 
     logger.info("consumer {} is closed", id);

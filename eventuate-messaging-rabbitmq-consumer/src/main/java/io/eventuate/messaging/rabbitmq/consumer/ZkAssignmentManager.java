@@ -20,16 +20,18 @@ public class ZkAssignmentManager implements AssignmentManager {
   @Override
   public void initializeAssignment(String groupId, String memberId, Assignment assignment) {
     try {
+      logger.info("Initializing assignment: groupId = {}, memberId = {}, assignment = {}", groupId, memberId, assignment);
       curatorFramework
               .create()
               .creatingParentsIfNeeded()
               .withMode(CreateMode.EPHEMERAL)
               .forPath(ZkUtil.pathForAssignment(groupId, memberId),
                       ZkUtil.stringToByteArray(JSonMapper.toJson(assignment)));
-
+      logger.info("Initialized assignment: groupId = {}, memberId = {}, assignment = {}", groupId, memberId, assignment);
     }
     catch (Exception e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Initializing assignment failed: groupId = {}, memberId = {}, assignment = {}", groupId, memberId, assignment);
+      logger.error("Initializing assignment failed", e);
       throw new RuntimeException(e);
     }
   }
