@@ -23,25 +23,33 @@ public class ZkAssignmentListener implements AssignmentListener {
     nodeCache = new NodeCache(curatorFramework, ZkUtil.pathForAssignment(groupId, memberId));
 
     try {
+      logger.info("Starting node cache: groupId = {}, memberId = {}", groupId, memberId);
       nodeCache.start();
+      logger.info("Started node cache: groupId = {}, memberId = {}", groupId, memberId);
     } catch (Exception e) {
+      logger.error("Starting node cache failed: groupId = {}, memberId = {}", groupId, memberId);
+      logger.error("Starting node cache failed", e);
       throw new RuntimeException(e);
     }
 
+    logger.info("Adding node cache listener: groupId = {}, memberId = {}", groupId, memberId);
     nodeCache.getListenable().addListener(() -> {
       Assignment assignment = JSonMapper.fromJson(ZkUtil.byteArrayToString(nodeCache.getCurrentData().getData()),
               Assignment.class);
 
       assignmentUpdatedCallback.accept(assignment);
     });
+    logger.info("Added node cache listener: groupId = {}, memberId = {}", groupId, memberId);
   }
 
   @Override
   public void remove() {
     try {
+      logger.info("Closing node cache");
       nodeCache.close();
+      logger.info("Closed node cache");
     } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Closing node cache failed", e);
     }
   }
 }

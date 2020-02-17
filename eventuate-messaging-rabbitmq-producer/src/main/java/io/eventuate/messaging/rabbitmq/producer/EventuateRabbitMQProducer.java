@@ -20,10 +20,12 @@ public class EventuateRabbitMQProducer {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setHost(url);
     try {
+      logger.info("Creating channel/connection");
       connection = factory.newConnection();
       channel = connection.createChannel();
+      logger.info("Created channel/connection");
     } catch (IOException | TimeoutException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Creating channel/connection failed", e);
       throw new RuntimeException(e);
     }
   }
@@ -36,7 +38,7 @@ public class EventuateRabbitMQProducer {
       channel.basicPublish(topic, key, bp, body.getBytes("UTF-8"));
 
     } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("sending message failed", e);
       throw new RuntimeException(e);
     }
 
@@ -45,10 +47,12 @@ public class EventuateRabbitMQProducer {
 
   public void close() {
     try {
+      logger.info("Closing channel/connection");
       channel.close();
       connection.close();
+      logger.info("Closed channel/connection");
     } catch (IOException | TimeoutException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Closing channel/connection failed", e);
     }
   }
 }

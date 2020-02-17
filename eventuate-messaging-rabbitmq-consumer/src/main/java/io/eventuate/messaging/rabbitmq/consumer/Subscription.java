@@ -57,7 +57,11 @@ public class Subscription {
 
     channels.forEach(channelName -> currentPartitionsByChannel.put(channelName, new HashSet<>()));
 
+    logger.info("Creating channel");
+
     consumerChannel = createRabbitMQChannel();
+
+    logger.info("Created channel");
 
     coordinator = createCoordinator(
             subscriptionId,
@@ -105,14 +109,15 @@ public class Subscription {
       return;
     }
 
-    logger.info("Closing subscription. {}", identificationInformation());
-
+    logger.info("Closing coordinator: subscription = {}", identificationInformation());
     coordinator.close();
 
     try {
+      logger.info("Closing consumer channel: subscription = {}", identificationInformation());
       consumerChannel.close();
     } catch (IOException | TimeoutException e) {
-      logger.error(e.getMessage(), e);
+      logger.error("Closing consumer failed: subscription = {}", identificationInformation());
+      logger.error("Closing consumer failed", e);
     }
 
     closingCallback.ifPresent(Runnable::run);
@@ -122,8 +127,12 @@ public class Subscription {
 
   private Channel createRabbitMQChannel() {
     try {
-      return connection.createChannel();
+      logger.info("Creating channel");
+      Channel channel = connection.createChannel();
+      logger.info("Created channel");
+      return channel;
     } catch (IOException e) {
+      logger.error("Creating channel failed", e);
       throw new RuntimeException(e);
     }
   }
@@ -152,14 +161,19 @@ public class Subscription {
         logger.info("Leading subscription created exchanges and queues for channel {}. {}",
                 channelName, identificationInformation());
       } catch (IOException e) {
-        logger.error(e.getMessage(), e);
+        logger.error("Failed creating exchanges and queues for channel {}. {}",
+                channelName, identificationInformation());
+        logger.error("Failed creating exchanges and queues", e);
         throw new RuntimeException(e);
       }
     }
 
     try {
+      logger.info("Closing subscriber group channel. {}", identificationInformation());
       subscriberGroupChannel.close();
+      logger.info("Closed subscriber group channel. {}", identificationInformation());
     } catch (Exception e) {
+      logger.error("Closing subscriber group channel failed. {}", identificationInformation());
       logger.error(e.getMessage(), e);
     }
   }
@@ -205,7 +219,8 @@ public class Subscription {
 
           logger.info("Partition {} is removed for channel {}. {}", resignedPartition, channelName, identificationInformation());
         } catch (Exception e) {
-          logger.error(e.getMessage(), e);
+          logger.error("Removing partition {} for channel {} failed. {}", resignedPartition, channelName, identificationInformation());
+          logger.error("Removing partition failed", e);
           throw new RuntimeException(e);
         }
       });
@@ -228,7 +243,8 @@ public class Subscription {
 
           logger.info("Partition {} is assigned for channel {}. {}", assignedPartition, channelName, identificationInformation());
         } catch (IOException e) {
-          logger.error(e.getMessage(), e);
+          logger.error("Partition assignment failed. {}", identificationInformation());
+          logger.error("Partition assignment failed", e);
           throw new RuntimeException(e);
         }
       });
