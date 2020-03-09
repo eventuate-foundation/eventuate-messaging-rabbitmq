@@ -6,7 +6,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: eventuate-messaging-rabbitmq-{{ checksum "gradle.properties" }}
+          keys:
+            - eventuate-messaging-rabbitmq-{{ checksum "gradle.properties" }}
+            - eventuate-messaging-rabbitmq-
       - run: TERM=dumb ./gradlew testClasses
       - save_cache:
           paths:
