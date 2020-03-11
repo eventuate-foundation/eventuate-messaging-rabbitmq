@@ -9,7 +9,7 @@ jobs:
           keys:
             - eventuate-messaging-rabbitmq-{{ checksum "gradle.properties" }}
             - eventuate-messaging-rabbitmq-
-      - run: TERM=dumb ./gradlew testClasses
+      - run: TERM=dumb ./gradlew testClasses aggregateJavaDocs
       - save_cache:
           paths:
             - ~/.gradle
