@@ -6,8 +6,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: eventuate-messaging-rabbitmq-{{ checksum "gradle.properties" }}
-      - run: TERM=dumb ./gradlew testClasses
+          keys:
+            - eventuate-messaging-rabbitmq-{{ checksum "gradle.properties" }}
+            - eventuate-messaging-rabbitmq-
+      - run: TERM=dumb ./gradlew testClasses aggregateJavaDocs
       - save_cache:
           paths:
             - ~/.gradle
