@@ -46,7 +46,7 @@ public class SubscriptionTest {
     ConcurrentLinkedQueue<Integer> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
 
     ConnectionFactory factory = new ConnectionFactory();
-    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getParsedBrokerAddresses());
+    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getBrokerAddresses());
 
     //created subscribtion selected as leader, assigned all partition to it self
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue);
@@ -94,7 +94,7 @@ public class SubscriptionTest {
     ConcurrentLinkedQueue<Integer> concurrentLinkedQueue1 = new ConcurrentLinkedQueue<>();
 
     ConnectionFactory factory = new ConnectionFactory();
-    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getParsedBrokerAddresses());
+    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getBrokerAddresses());
 
 
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue1);

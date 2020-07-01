@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Import;
 public class RabbitMQProducerTestConfiguration {
   @Bean
   public EventuateRabbitMQProducer eventuateRabbitMQProducer(EventuateRabbitMQProducerConfigurationProperties properties) {
-    return new EventuateRabbitMQProducer(properties.getParsedBrokerAddresses());
+    return new EventuateRabbitMQProducer(properties.getBrokerAddresses());
   }
 }

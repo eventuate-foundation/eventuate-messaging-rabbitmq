@@ -18,7 +18,7 @@ public class MessageConsumerRabbitMQConfiguration {
   public MessageConsumerRabbitMQImpl messageConsumerRabbitMQ(EventuateRabbitMQConsumerConfigurationProperties properties,
                                                              CoordinatorFactory coordinatorFactory) {
     return new MessageConsumerRabbitMQImpl(coordinatorFactory,
-            properties.getParsedBrokerAddresses(),
+            properties.getBrokerAddresses(),
             properties.getPartitionCount());
   }
 
