@@ -11,16 +11,10 @@ public class EventuateRabbitMQCommonConfigurationProperties {
   private String url;
 
   public Address[] getBrokerAddresses() {
-    if (url == null && brokerAddresses == null) {
+    if ((url == null && brokerAddresses == null) || (url != null && brokerAddresses != null)) {
       throw new IllegalArgumentException("One of rabbitmq.broker.addresses or rabbitmq.url should be specified");
     }
 
-    if (url != null && brokerAddresses != null) {
-      throw new IllegalArgumentException("Only one of rabbitmq.broker.addresses or rabbitmq.url should be specified");
-    }
-
-    if (url != null) return Address.parseAddresses(url);
-
-    return Address.parseAddresses(brokerAddresses);
+    return Address.parseAddresses(url == null ? brokerAddresses : url);
   }
 }
