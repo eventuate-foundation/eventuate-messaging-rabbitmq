@@ -1,3 +1,4 @@
+include 'eventuate-messaging-rabbitmq-spring-common'
 include 'eventuate-messaging-rabbitmq-spring-consumer'
 include 'eventuate-messaging-rabbitmq-spring-producer'
 include 'eventuate-messaging-rabbitmq-spring-integration-tests'

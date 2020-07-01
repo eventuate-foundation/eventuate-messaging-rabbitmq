@@ -1,6 +1,6 @@
 apply plugin: PublicModulePlugin
 
 dependencies {
-    compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.2.0'
+    compile project(":eventuate-messaging-rabbitmq-spring-common")
 }
 

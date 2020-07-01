@@ -1,5 +1,6 @@
 package io.eventuate.messaging.rabbitmq.spring.consumer;
 
+import com.rabbitmq.client.Address;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import io.eventuate.messaging.partitionmanagement.CommonMessageConsumer;
@@ -27,30 +28,33 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
   private CoordinatorFactory coordinatorFactory;
   private Connection connection;
   private int partitionCount;
+  private Address[] brokerAddresses;
 
   private ConcurrentLinkedQueue<Subscription> subscriptions = new ConcurrentLinkedQueue<>();
 
   public MessageConsumerRabbitMQImpl(CoordinatorFactory coordinatorFactory,
-                                     String rabbitMQUrl,
+                                     Address[] brokerAddresses,
                                      int partitionCount) {
     this(() -> UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             coordinatorFactory,
-            rabbitMQUrl,
+            brokerAddresses,
             partitionCount);
   }
 
   public MessageConsumerRabbitMQImpl(Supplier<String> subscriptionIdSupplier,
                                      String consumerId,
                                      CoordinatorFactory coordinatorFactory,
-                                     String rabbitMQUrl,
+                                     Address[] brokerAddresses,
                                      int partitionCount) {
 
     this.subscriptionIdSupplier = subscriptionIdSupplier;
     this.consumerId = consumerId;
     this.coordinatorFactory = coordinatorFactory;
     this.partitionCount = partitionCount;
-    prepareRabbitMQConnection(rabbitMQUrl);
+    this.brokerAddresses = brokerAddresses;
+
+    prepareRabbitMQConnection();
 
     logger.info("consumer {} created and ready to subscribe", id);
   }
@@ -63,12 +67,11 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     subscriptions.forEach(subscription -> subscription.setLeaderHook(leaderHook));
   }
 
-  private void prepareRabbitMQConnection(String rabbitMQUrl) {
+  private void prepareRabbitMQConnection() {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost(rabbitMQUrl);
     try {
       logger.info("Creating connection");
-      connection = factory.newConnection();
+      connection = factory.newConnection(brokerAddresses);
       logger.info("Created connection");
     } catch (IOException | TimeoutException e) {
       logger.error("Creating connection failed", e);

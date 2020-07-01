@@ -15,13 +15,12 @@ public class EventuateRabbitMQProducer {
   private Connection connection;
   private Channel channel;
 
-  public EventuateRabbitMQProducer(String url) {
+  public EventuateRabbitMQProducer(Address[] brokerAddresses) {
 
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost(url);
     try {
       logger.info("Creating channel/connection");
-      connection = factory.newConnection();
+      connection = factory.newConnection(brokerAddresses);
       channel = connection.createChannel();
       logger.info("Created channel/connection");
     } catch (IOException | TimeoutException e) {
