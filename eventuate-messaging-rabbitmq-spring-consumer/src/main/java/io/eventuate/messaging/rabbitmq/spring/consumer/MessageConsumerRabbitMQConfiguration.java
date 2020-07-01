@@ -6,29 +6,25 @@ import io.eventuate.messaging.partitionmanagement.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class)
 public class MessageConsumerRabbitMQConfiguration {
 
-  @Value("${eventuatelocal.zookeeper.connection.string}")
-  private String zkUrl;
-
-  @Value("${eventuate.rabbitmq.partition.count:#{2}}")
-  private int partitionCount;
-
-  @Value("${rabbitmq.url}")
-  private String rabbitMQUrl;
-
   @Bean
-  public MessageConsumerRabbitMQImpl messageConsumerRabbitMQ(CoordinatorFactory coordinatorFactory) {
-    return new MessageConsumerRabbitMQImpl(coordinatorFactory, rabbitMQUrl, partitionCount);
+  public MessageConsumerRabbitMQImpl messageConsumerRabbitMQ(EventuateRabbitMQConsumerConfigurationProperties properties,
+                                                             CoordinatorFactory coordinatorFactory) {
+    return new MessageConsumerRabbitMQImpl(coordinatorFactory,
+            properties.getParsedBrokerAddresses(),
+            properties.getPartitionCount());
   }
 
   @Bean
-  public CoordinatorFactory coordinatorFactory(AssignmentManager assignmentManager,
+  public CoordinatorFactory coordinatorFactory(EventuateRabbitMQConsumerConfigurationProperties properties,
+                                               AssignmentManager assignmentManager,
                                                AssignmentListenerFactory assignmentListenerFactory,
                                                MemberGroupManagerFactory memberGroupManagerFactory,
                                                LeaderSelectorFactory leaderSelectorFactory,
@@ -38,7 +34,7 @@ public class MessageConsumerRabbitMQConfiguration {
             memberGroupManagerFactory,
             leaderSelectorFactory,
             groupMemberFactory,
-            partitionCount);
+            properties.getPartitionCount());
   }
 
   @Bean
@@ -70,8 +66,9 @@ public class MessageConsumerRabbitMQConfiguration {
   }
 
   @Bean
-  public CuratorFramework curatorFramework() {
-    CuratorFramework framework = CuratorFrameworkFactory.newClient(zkUrl, new ExponentialBackoffRetry(1000, 5));
+  public CuratorFramework curatorFramework(EventuateRabbitMQConsumerConfigurationProperties properties) {
+    CuratorFramework framework = CuratorFrameworkFactory.newClient(properties.getZkUrl(),
+            new ExponentialBackoffRetry(1000, 5));
     framework.start();
     return framework;
   }

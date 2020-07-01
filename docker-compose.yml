@@ -8,4 +8,4 @@ zookeeper:
 rabbitmq:
   build: ./rabbitmq
   ports:
-    - 5672:5672
+    - 6000:5672

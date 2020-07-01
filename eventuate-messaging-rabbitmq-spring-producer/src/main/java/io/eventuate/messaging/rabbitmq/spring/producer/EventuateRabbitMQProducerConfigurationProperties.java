@@ -1,0 +1,6 @@
+package io.eventuate.messaging.rabbitmq.spring.producer;
+
+import io.eventuate.messaging.rabbitmq.spring.common.EventuateRabbitMQCommonConfigurationProperties;
+
+public class EventuateRabbitMQProducerConfigurationProperties extends EventuateRabbitMQCommonConfigurationProperties {
+}

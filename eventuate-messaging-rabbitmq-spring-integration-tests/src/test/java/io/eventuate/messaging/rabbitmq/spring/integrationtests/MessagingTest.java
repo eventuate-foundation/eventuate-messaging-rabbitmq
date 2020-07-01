@@ -16,11 +16,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -28,24 +24,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = MessagingTest.Config.class)
+@SpringBootTest(classes = {RabbitMQProducerTestConfiguration.class, EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MessagingTest extends AbstractMessagingTest {
 
-  @Configuration
-  @EnableAutoConfiguration
-  public static class Config {
-    @Bean
-    public EventuateRabbitMQProducer rabbitMQMessageProducer(@Value("${rabbitmq.url}") String rabbitMQURL) {
-      return new EventuateRabbitMQProducer(rabbitMQURL);
-    }
-  }
-
-  @Value("${rabbitmq.url}")
-  private String rabbitMQURL;
-
-  @Value("${eventuatelocal.zookeeper.connection.string}")
-  private String zkUrl;
+  @Autowired
+  private EventuateRabbitMQConsumerConfigurationProperties eventuateRabbitMQConsumerConfigurationProperties;
 
   @Autowired
   private EventuateRabbitMQProducer eventuateRabbitMQProducer;
@@ -93,7 +77,8 @@ public class MessagingTest extends AbstractMessagingTest {
   }
 
   private MessageConsumerRabbitMQImpl createConsumer(int partitionCount) {
-    CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(zkUrl, new ExponentialBackoffRetry(1000, 5));
+    CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(eventuateRabbitMQConsumerConfigurationProperties.getZkUrl(),
+            new ExponentialBackoffRetry(1000, 5));
     curatorFramework.start();
 
     CoordinatorFactory coordinatorFactory = new CoordinatorFactoryImpl(new ZkAssignmentManager(curatorFramework),
@@ -106,7 +91,7 @@ public class MessagingTest extends AbstractMessagingTest {
     MessageConsumerRabbitMQImpl messageConsumerRabbitMQ = new MessageConsumerRabbitMQImpl(subscriptionIdSupplier,
             consumerIdSupplier.get(),
             coordinatorFactory,
-            rabbitMQURL,
+            eventuateRabbitMQConsumerConfigurationProperties.getParsedBrokerAddresses(),
             partitionCount);
 
     return messageConsumerRabbitMQ;

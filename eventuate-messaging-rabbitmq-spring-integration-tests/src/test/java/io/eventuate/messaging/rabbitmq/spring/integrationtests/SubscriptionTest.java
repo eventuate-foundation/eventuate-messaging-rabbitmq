@@ -7,6 +7,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import io.eventuate.coordination.leadership.LeaderSelectedCallback;
 import io.eventuate.messaging.partitionmanagement.Assignment;
 import io.eventuate.messaging.partitionmanagement.Coordinator;
+import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumerConfigurationProperties;
+import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumerConfigurationPropertiesConfiguration;
 import io.eventuate.messaging.rabbitmq.spring.consumer.Subscription;
 import io.eventuate.messaging.rabbitmq.spring.producer.EventuateRabbitMQProducer;
 import io.eventuate.util.test.async.Eventually;
@@ -15,11 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,21 +27,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SubscriptionTest.Config.class)
+@SpringBootTest(classes = {RabbitMQProducerTestConfiguration.class, EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SubscriptionTest {
 
-  @Configuration
-  @EnableAutoConfiguration
-  public static class Config {
-    @Bean
-    public EventuateRabbitMQProducer rabbitMQMessageProducer(@Value("${rabbitmq.url}") String rabbitMQURL) {
-      return new EventuateRabbitMQProducer(rabbitMQURL);
-    }
-  }
-
-  @Value("${rabbitmq.url}")
-  private String rabbitMQURL;
+  @Autowired
+  private EventuateRabbitMQConsumerConfigurationProperties eventuateRabbitMQConsumerConfigurationProperties;
 
   @Autowired
   private EventuateRabbitMQProducer eventuateRabbitMQProducer;
@@ -57,8 +46,7 @@ public class SubscriptionTest {
     ConcurrentLinkedQueue<Integer> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
 
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost(rabbitMQURL);
-    Connection connection = factory.newConnection();
+    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getParsedBrokerAddresses());
 
     //created subscribtion selected as leader, assigned all partition to it self
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue);
@@ -106,8 +94,7 @@ public class SubscriptionTest {
     ConcurrentLinkedQueue<Integer> concurrentLinkedQueue1 = new ConcurrentLinkedQueue<>();
 
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost(rabbitMQURL);
-    Connection connection = factory.newConnection();
+    Connection connection = factory.newConnection(eventuateRabbitMQConsumerConfigurationProperties.getParsedBrokerAddresses());
 
 
     CoordinationCallbacks coordinationCallbacks = createSubscription(connection, subscriberId, destination, concurrentLinkedQueue1);
