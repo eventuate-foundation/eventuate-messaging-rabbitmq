@@ -53,7 +53,6 @@ subprojects {
         deployerJars 'org.springframework.build:aws-maven:5.0.0.RELEASE'
     }
 
-
     uploadArchives {
         repositories {
             mavenDeployer {
