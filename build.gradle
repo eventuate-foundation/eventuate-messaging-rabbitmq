@@ -14,7 +14,9 @@ apply plugin: 'docker-compose'
 allprojects {
     group = "io.eventuate.messaging.rabbitmq"
 }
+
 apply plugin: "io.eventuate.plugins.gradle.publish.EventuatePublish"
+apply plugin: "io.eventuate.plugins.gradle.publish.EventuatePublishDockerImages"
 
 
 subprojects {
@@ -52,6 +54,11 @@ gradle.projectsEvaluated {
 
 dockerCompose {
     projectName = null
+    environment.put "DOCKER_IMAGE_TAG", dockerImageTag
+
+    publish {
+        projectName = null
+        useComposeFiles = ["docker-compose.yml"]
+        removeContainers = project.ext.removeContainers
+    }
 }
-
-

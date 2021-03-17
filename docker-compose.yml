@@ -1,11 +1,14 @@
-zookeeper:
-  image: confluentinc/cp-zookeeper:5.2.4
-  ports:
-    - 2181:2181
-  environment:
-    ZOOKEEPER_CLIENT_PORT: 2181
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.4
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
 
-rabbitmq:
-  build: ./rabbitmq
-  ports:
-    - 5672:5672
+  rabbitmq:
+    build: ./rabbitmq
+    image: eventuateio/eventuate-rabbitmq:DOCKER_IMAGE_TAG
+    ports:
+      - 5672:5672
