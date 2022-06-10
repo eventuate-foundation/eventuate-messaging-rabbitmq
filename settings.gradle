@@ -1,3 +1,5 @@
+rootProject.name="eventuate-messaging-rabbitmq"
+
 include 'eventuate-messaging-rabbitmq-spring-common'
 include 'eventuate-messaging-rabbitmq-spring-consumer'
 include 'eventuate-messaging-rabbitmq-spring-producer'
