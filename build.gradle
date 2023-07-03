@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath "io.eventuate.plugins.gradle:eventuate-plugins-gradle-publish:$eventuatePluginsGradleVersion"
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.13.2"
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:$dockerComposePluginVersion"
     }
 }
 
@@ -63,6 +63,6 @@ dockerCompose {
     publish {
         projectName = null
         useComposeFiles = ["docker-compose.yml"]
-        removeContainers = project.ext.removeContainers
+        removeContainers = project.ext.removeContainers.toBoolean()
     }
 }
