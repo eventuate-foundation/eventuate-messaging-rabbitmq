@@ -2,6 +2,7 @@ package io.eventuate.messaging.rabbitmq.spring.integrationtests;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.rabbitmq.client.ConnectionFactory;
 import io.eventuate.coordination.leadership.zookeeper.ZkLeaderSelector;
 import io.eventuate.messaging.partitionmanagement.CoordinatorFactory;
 import io.eventuate.messaging.partitionmanagement.CoordinatorFactoryImpl;
@@ -87,10 +88,13 @@ public class MessagingTest extends AbstractMessagingTest {
             (lockId, leaderId, leaderSelectedCallback, leaderRemovedCallback) -> new ZkLeaderSelector(curatorFramework, lockId, leaderId, leaderSelectedCallback, leaderRemovedCallback),
             (groupId, memberId) -> new ZkGroupMember(curatorFramework, groupId, memberId),
             partitionCount);
-
+    ConnectionFactory connectionFactory=new ConnectionFactory();
+    connectionFactory.setUsername(eventuateRabbitMQConsumerConfigurationProperties.getUsername());
+    connectionFactory.setUsername(eventuateRabbitMQConsumerConfigurationProperties.getPassword());
     MessageConsumerRabbitMQImpl messageConsumerRabbitMQ = new MessageConsumerRabbitMQImpl(subscriptionIdSupplier,
             consumerIdSupplier.get(),
             coordinatorFactory,
+            connectionFactory,
             eventuateRabbitMQConsumerConfigurationProperties.getBrokerAddresses(),
             partitionCount);
 
