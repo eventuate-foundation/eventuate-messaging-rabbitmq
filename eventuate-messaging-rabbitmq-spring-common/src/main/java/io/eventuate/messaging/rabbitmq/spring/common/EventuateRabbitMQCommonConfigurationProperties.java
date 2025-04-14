@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 public class EventuateRabbitMQCommonConfigurationProperties {
   @Value("${rabbitmq.broker.addresses:#{null}}")
   private String brokerAddresses;
+  @Value("${rabbitmq.username:#{null}}")
+  private String username;
+  @Value("${rabbitmq.password:#{null}}")
+  private String password;
+
 
   @Value("${rabbitmq.url:#{null}}")
   private String url;
@@ -16,5 +21,11 @@ public class EventuateRabbitMQCommonConfigurationProperties {
     }
 
     return Address.parseAddresses(url == null ? brokerAddresses : url);
+  }
+  public String getUsername(){
+    return username;
+  }
+  public String getPassword(){
+    return password;
   }
 }
