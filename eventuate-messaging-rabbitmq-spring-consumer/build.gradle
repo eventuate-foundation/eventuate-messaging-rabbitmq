@@ -1,17 +1,17 @@
 
 dependencies {
-    compile project(":eventuate-messaging-rabbitmq-spring-common")
+    api project(":eventuate-messaging-rabbitmq-spring-common")
 
-    compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
-    compile "io.eventuate.common:eventuate-common-coordination-leadership:$eventuateCommonVersion"
-    compile "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
+    implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+    implementation "io.eventuate.common:eventuate-common-coordination-leadership:$eventuateCommonVersion"
+    implementation "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
 
-    compile('org.apache.curator:curator-framework:2.11.0')
-    compile('org.apache.curator:curator-recipes:2.11.0')
-    compile "io.eventuate.common:eventuate-common-coordination-leadership-zookeeper:$eventuateCommonVersion"
-    compile "io.eventuate.common:eventuate-common-json-mapper:$eventuateCommonVersion"
-    compile "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
-    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    implementation('org.apache.curator:curator-framework:2.11.0')
+    implementation('org.apache.curator:curator-recipes:2.11.0')
+    implementation "io.eventuate.common:eventuate-common-coordination-leadership-zookeeper:$eventuateCommonVersion"
+    implementation "io.eventuate.common:eventuate-common-json-mapper:$eventuateCommonVersion"
+    implementation "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

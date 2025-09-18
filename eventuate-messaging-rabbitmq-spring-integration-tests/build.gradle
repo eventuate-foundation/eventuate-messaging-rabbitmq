@@ -1,10 +1,15 @@
 
 dependencies {
-    compile project(":eventuate-messaging-rabbitmq-spring-producer")
-    compile project(":eventuate-messaging-rabbitmq-spring-consumer")
-    compile "io.eventuate.common.messaging:eventuate-messaging-partition-management-tests:$eventuateMessagingPartitionManagementVersion"
-    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-    compile "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
+    implementation project(":eventuate-messaging-rabbitmq-spring-producer")
+    implementation project(":eventuate-messaging-rabbitmq-spring-consumer")
+    implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+
+    implementation "io.eventuate.common:eventuate-common-coordination-leadership-zookeeper:$eventuateCommonVersion"
+    implementation "io.eventuate.common.messaging:eventuate-messaging-partition-management-tests:$eventuateMessagingPartitionManagementVersion"
+    testImplementation "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    implementation "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
 }
 
 test {
