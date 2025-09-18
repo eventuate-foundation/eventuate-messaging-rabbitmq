@@ -5,19 +5,16 @@ import io.eventuate.util.test.async.Eventually;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 @SpringBootTest(classes = GroupManagerTest.TestConfiguration.class)
-@RunWith(SpringRunner.class)
 public class GroupManagerTest {
 
   @Configuration
@@ -41,7 +38,7 @@ public class GroupManagerTest {
 
     createGroupMember(createCuratorFramework(), "1");
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of("1"), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of("1"), groupMemberIds));
   }
 
   @Test
@@ -55,11 +52,11 @@ public class GroupManagerTest {
       groupMemberIds.addAll(members);
     });
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of("1"), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of("1"), groupMemberIds));
 
     groupMember.remove();
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of(), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of(), groupMemberIds));
   }
 
   @Test
@@ -75,11 +72,11 @@ public class GroupManagerTest {
       groupMemberIds.addAll(members);
     });
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of("1"), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of("1"), groupMemberIds));
 
     curatorFramework.close();
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of(), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of(), groupMemberIds));
   }
 
   @Test
@@ -98,12 +95,12 @@ public class GroupManagerTest {
     }
 
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of("0", "1", "2", "3", "4"), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of("0", "1", "2", "3", "4"), groupMemberIds));
 
     groupMembers.poll().remove();
     groupMembers.poll().remove();
 
-    Eventually.eventually(() -> Assert.assertEquals(ImmutableSet.of("2", "3", "4"), groupMemberIds));
+    Eventually.eventually(() -> Assertions.assertEquals(ImmutableSet.of("2", "3", "4"), groupMemberIds));
   }
 
   private ZkMemberGroupManager createGroupManager(CuratorFramework curatorFramework, Consumer<Set<String>> groupMembersUpdatedCallback) {

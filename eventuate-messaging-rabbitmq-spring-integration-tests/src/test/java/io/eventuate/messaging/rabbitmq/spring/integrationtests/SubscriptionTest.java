@@ -12,21 +12,19 @@ import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumer
 import io.eventuate.messaging.rabbitmq.spring.consumer.Subscription;
 import io.eventuate.messaging.rabbitmq.spring.producer.EventuateRabbitMQProducer;
 import io.eventuate.util.test.async.Eventually;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RabbitMQProducerTestConfiguration.class, EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SubscriptionTest {
@@ -55,12 +53,12 @@ public class SubscriptionTest {
 
     for (int i = 0; i < messages; i++) {
       eventuateRabbitMQProducer.send(destination,
-              String.valueOf(Math.random()),
+              String.valueOf(ThreadLocalRandom.current().nextDouble()),
               String.valueOf(i));
     }
 
     //check that all sent messages received by subscription
-    Eventually.eventually(30, 1, TimeUnit.SECONDS, () -> Assert.assertEquals(messages, concurrentLinkedQueue.size()));
+    Eventually.eventually(30, 1, TimeUnit.SECONDS, () -> Assertions.assertEquals(messages, concurrentLinkedQueue.size()));
 
     //removing leadership, resigning all partitions
     coordinationCallbacks.getAssignmentUpdatedCallback().accept(new Assignment(ImmutableSet.of(destination), ImmutableMap.of(destination, ImmutableSet.of())));
@@ -74,11 +72,11 @@ public class SubscriptionTest {
 
     for (int i = 0; i < messages; i++) {
       eventuateRabbitMQProducer.send(destination,
-              String.valueOf(Math.random()),
+              String.valueOf(ThreadLocalRandom.current().nextDouble()),
               String.valueOf(i));
     }
 
-    Eventually.eventually(30, 1, TimeUnit.SECONDS, () -> Assert.assertEquals(messages, concurrentLinkedQueue.size()));
+    Eventually.eventually(30, 1, TimeUnit.SECONDS, () -> Assertions.assertEquals(messages, concurrentLinkedQueue.size()));
 
     connection.close();
   }
@@ -108,14 +106,14 @@ public class SubscriptionTest {
 
     for (int i = 0; i < messages; i++) {
       eventuateRabbitMQProducer.send(destination,
-              String.valueOf(Math.random()),
+              String.valueOf(ThreadLocalRandom.current().nextDouble()),
               String.valueOf(i));
     }
 
     Eventually.eventually(30, 1, TimeUnit.SECONDS, () -> {
-      Assert.assertFalse(concurrentLinkedQueue1.isEmpty());
-      Assert.assertFalse(concurrentLinkedQueue2.isEmpty());
-      Assert.assertEquals(messages, concurrentLinkedQueue1.size() + concurrentLinkedQueue2.size());
+      Assertions.assertFalse(concurrentLinkedQueue1.isEmpty());
+      Assertions.assertFalse(concurrentLinkedQueue2.isEmpty());
+      Assertions.assertEquals(messages, concurrentLinkedQueue1.size() + concurrentLinkedQueue2.size());
     });
 
     connection.close();
@@ -124,9 +122,8 @@ public class SubscriptionTest {
   private CoordinationCallbacks createSubscription(Connection connection, String subscriberId, String destination, ConcurrentLinkedQueue concurrentLinkedQueue) {
     CoordinationCallbacks coordinationCallbacks = new CoordinationCallbacks();
 
-    new Subscription(null, null, null, connection, subscriberId, ImmutableSet.of(destination), 2, (message, runnable) -> {
-      concurrentLinkedQueue.add(Integer.valueOf(message.getPayload()));
-    }) {
+    new Subscription(null, null, null, connection, subscriberId, ImmutableSet.of(destination), 2, (message, runnable) ->
+      concurrentLinkedQueue.add(Integer.valueOf(message.getPayload()))) {
       @Override
       protected Coordinator createCoordinator(String groupMemberId,
                                               String subscriberId,

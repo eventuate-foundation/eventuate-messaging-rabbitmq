@@ -98,7 +98,7 @@ public class Subscription {
             channels,
             subscriptionId,
             assignmentUpdatedCallback,
-            String.format("/eventuate-tram/rabbitmq/consumer-leaders/%s", subscriberId),
+            "/eventuate-tram/rabbitmq/consumer-leaders/%s".formatted(subscriberId),
             leaderSelectedCallback,
             leaderRemovedCallback);
   }
@@ -286,14 +286,14 @@ public class Subscription {
   }
 
   private String makeConsistentHashExchangeName(String channelName, String subscriberId) {
-    return String.format("%s-%s", channelName, subscriberId);
+    return "%s-%s".formatted(channelName, subscriberId);
   }
 
   private String makeConsistentHashQueueName(String channelName, String subscriberId, int partition) {
-    return String.format("%s-%s-%s", channelName, subscriberId, partition);
+    return "%s-%s-%s".formatted(channelName, subscriberId, partition);
   }
 
   private String identificationInformation() {
-    return String.format("(consumerId = [%s], subscriptionId = [%s], subscriberId = [%s])", consumerId, subscriptionId, subscriberId);
+    return "(consumerId = [%s], subscriptionId = [%s], subscriberId = [%s])".formatted(consumerId, subscriptionId, subscriberId);
   }
 }

@@ -12,18 +12,15 @@ import io.eventuate.util.test.async.Eventually;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RabbitMQProducerTestConfiguration.class, EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MessagingTest extends AbstractMessagingTest {
@@ -54,9 +51,9 @@ public class MessagingTest extends AbstractMessagingTest {
 
     sendMessages(10, 2);
 
-    Eventually.eventually(() -> Assert.assertEquals(1, exceptions.get()));
+    Eventually.eventually(() -> Assertions.assertEquals(1, exceptions.get()));
     Thread.sleep(3000);
-    Eventually.eventually(() -> Assert.assertEquals(1, exceptions.get()));
+    Eventually.eventually(() -> Assertions.assertEquals(1, exceptions.get()));
   }
 
   @Override

@@ -2,4 +2,7 @@
 dependencies {
     compile project(":eventuate-messaging-rabbitmq-spring-common")
 }
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
 
