@@ -32,12 +32,13 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
 
   private ConcurrentLinkedQueue<Subscription> subscriptions = new ConcurrentLinkedQueue<>();
 
-  public MessageConsumerRabbitMQImpl(CoordinatorFactory coordinatorFactory,
+  public MessageConsumerRabbitMQImpl(CoordinatorFactory coordinatorFactory,ConnectionFactory connectionFactory,
                                      Address[] brokerAddresses,
                                      int partitionCount) {
     this(() -> UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             coordinatorFactory,
+            connectionFactory,
             brokerAddresses,
             partitionCount);
   }
@@ -45,6 +46,7 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
   public MessageConsumerRabbitMQImpl(Supplier<String> subscriptionIdSupplier,
                                      String consumerId,
                                      CoordinatorFactory coordinatorFactory,
+                                     ConnectionFactory connectionFactory,
                                      Address[] brokerAddresses,
                                      int partitionCount) {
 
@@ -54,7 +56,7 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     this.partitionCount = partitionCount;
     this.brokerAddresses = brokerAddresses;
 
-    prepareRabbitMQConnection();
+    prepareRabbitMQConnection(connectionFactory);
 
     logger.info("consumer {} created and ready to subscribe", id);
   }
@@ -67,8 +69,7 @@ public class MessageConsumerRabbitMQImpl implements CommonMessageConsumer {
     subscriptions.forEach(subscription -> subscription.setLeaderHook(leaderHook));
   }
 
-  private void prepareRabbitMQConnection() {
-    ConnectionFactory factory = new ConnectionFactory();
+  private void prepareRabbitMQConnection(ConnectionFactory factory) {
     try {
       logger.info("Creating connection");
       connection = factory.newConnection(brokerAddresses);
