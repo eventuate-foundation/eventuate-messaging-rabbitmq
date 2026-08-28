@@ -1,7 +1,7 @@
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
-    api 'com.rabbitmq:amqp-client:5.2.0'
+    api "com.rabbitmq:amqp-client:$amqpClientVersion"
 }
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

@@ -6,12 +6,13 @@ dependencies {
     implementation "io.eventuate.common:eventuate-common-coordination-leadership:$eventuateCommonVersion"
     api "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
 
-    implementation('org.apache.curator:curator-framework:2.11.0')
-    implementation('org.apache.curator:curator-recipes:2.11.0')
+    implementation "org.apache.curator:curator-framework:$curatorVersion"
+    implementation "org.apache.curator:curator-recipes:$curatorVersion"
     implementation "io.eventuate.common:eventuate-common-coordination-leadership-zookeeper:$eventuateCommonVersion"
     implementation "io.eventuate.common:eventuate-common-json-mapper:$eventuateCommonVersion"
     implementation "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation "com.google.guava:guava:$guavaVersion"
 }
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

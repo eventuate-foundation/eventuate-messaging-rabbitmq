@@ -4,7 +4,6 @@ buildscript {
         maven {
           url "https://plugins.gradle.org/m2/"
         }
-        jcenter()
         eventuateMavenRepoUrl.split(',').each { repoUrl -> maven { url repoUrl } }
     }
     dependencies {
@@ -36,13 +35,12 @@ subprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
         maven { url "https://repo.spring.io/milestone" }
         eventuateMavenRepoUrl.split(',').each { repoUrl -> maven { url repoUrl } }
     }
 
     dependencies {
-        testImplementation "org.mockito:mockito-core:4.11.0"
+        testImplementation "org.mockito:mockito-core:$mockitoVersion"
         testImplementation "org.assertj:assertj-core:$assertjVersion"
         testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
         testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion"

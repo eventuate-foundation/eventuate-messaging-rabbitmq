@@ -9,6 +9,7 @@ dependencies {
     testImplementation "io.eventuate.common.messaging:eventuate-messaging-partition-management:$eventuateMessagingPartitionManagementVersion"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation "com.google.guava:guava:$guavaVersion"
     implementation "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
 }
 
