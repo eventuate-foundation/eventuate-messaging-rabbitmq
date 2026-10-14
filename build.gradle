@@ -62,6 +62,7 @@ gradle.projectsEvaluated {
 dockerCompose {
     projectName = null
     environment.put "DOCKER_IMAGE_TAG", dockerImageTag
+    environment.put "EVENTUATE_COMMON_VERSION", eventuateCommonImageVersion
 
     publish {
         projectName = null
